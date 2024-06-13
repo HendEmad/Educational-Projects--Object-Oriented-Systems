@@ -1,0 +1,279 @@
+@startuml
+
+' Bridge Pattern for HospitalSystem
+abstract class HospitalSystem {
+    + commandQueue : LinkedList<Command>
+    + executeCommand(c: Command) : void
+}
+
+class HospitalSystemImpl {
+    - patients : HashMap<int, Patient>
+    - doctors : HashMap<int, Doctor>
+    - appointments : HashMap<int, Appointment>
+    - treatments : HashMap<int, Treatment>
+    - visitors : HashMap<int, Visitor>
+    - pharmacies : HashMap<int, Pharmacy>
+    - laboratories : HashMap<int, Laboratory>
+    - icus : HashMap<int, ICU>
+    - staffRooms : HashMap<int, StaffRoom>
+    - scans : HashMap<int, Scan>
+    - medicalOperations : HashMap<int, MedicalOperation>
+
+    + admitPatient(p : Patient) : void
+    + scheduleAppointment(a : Appointment) : void
+    + recordTreatment(t : Treatment) : void
+    + registerVisitor(v : Visitor) : void
+    + dispenseMedication(pres : Prescription) : void
+    + performScan(scan : Scan) : void
+    + conductLabTest(test : LabTest) : void
+    + operate(op : MedicalOperation) : void
+}
+
+HospitalSystem o-- HospitalSystemImpl: "uses"
+
+' Bridge Pattern for RequestHandler
+abstract class RequestHandler {
+    + nextHandler : RequestHandler
+    + hospitalSystem : HospitalSystem
+    + setNext(handler : RequestHandler) : RequestHandler
+    + setHospitalSystem(hs : HospitalSystem) : void
+    + handleRequest(request : Request) : void
+}
+
+class ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+RequestHandler o-- ConcreteRequestHandler: "uses"
+
+class ReceptionistHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class DoctorHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class BillingHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class PharmacyHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class LaboratoryHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class ICUHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class StaffRoomHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class ScanHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+class MedicalOperationHandler extends ConcreteRequestHandler {
+    + handleRequest(request : Request) : void
+}
+
+' Command Pattern
+interface Command {
+    + execute() : void
+}
+
+class AdmitPatientCommand implements Command {
+    - patient : Patient
+    + execute() : void
+}
+
+class ScheduleAppointmentCommand implements Command {
+    - appointment : Appointment
+    + execute() : void
+}
+
+class RecordTreatmentCommand implements Command {
+    - treatment : Treatment
+    + execute() : void
+}
+
+class RegisterVisitorCommand implements Command {
+    - visitor : Visitor
+    + execute() : void
+}
+
+class DispenseMedicationCommand implements Command {
+    - prescription : Prescription
+    + execute() : void
+}
+
+class PerformScanCommand implements Command {
+    - scan : Scan
+    + execute() : void
+}
+
+class ConductLabTestCommand implements Command {
+    - test : LabTest
+    + execute() : void
+}
+
+class OperateCommand implements Command {
+    - operation : MedicalOperation
+    + execute() : void
+}
+
+class ICUCommand implements Command {
+    - icu : ICU
+    + execute() : void
+}
+
+Command <|.. AdmitPatientCommand
+Command <|.. ScheduleAppointmentCommand
+Command <|.. RecordTreatmentCommand
+Command <|.. RegisterVisitorCommand
+Command <|.. DispenseMedicationCommand
+Command <|.. PerformScanCommand
+Command <|.. ConductLabTestCommand
+Command <|.. OperateCommand
+Command <|.. ICUCommand
+
+' Data Models
+class Patient {
+    + id : int
+    + name : String
+}
+
+class Doctor {
+    + id : int
+    + name : String
+    + specialty : String
+}
+
+class Appointment {
+    + id : int
+    + patient : Patient
+    + doctor : Doctor
+    + date : Date
+}
+
+class Treatment {
+    + id : int
+    + patient : Patient
+    + doctor : Doctor
+    + description : String
+    + date : Date
+}
+
+class Visitor {
+    + id : int
+    + name : String
+    + patient : Patient
+    + visitDate : Date
+}
+
+class Pharmacy {
+    + id : int
+    + name : String
+    + medications : HashMap<int, Medication>
+}
+
+class Prescription {
+    + id : int
+    + patient : Patient
+    + medication : Medication
+    + dosage : String
+}
+
+class Medication {
+    + id : int
+    + name : String
+    + quantity : int
+}
+
+class Laboratory {
+    + id : int
+    + name : String
+    + labTests : HashMap<int, LabTest>
+}
+
+class LabTest {
+    + id : int
+    + patient : Patient
+    + doctor : Doctor
+    + testType : String
+    + result : String
+    + date : Date
+}
+
+class ICU {
+    + id : int
+    + name : String
+    + patients : List<Patient>
+}
+
+class StaffRoom {
+    + id : int
+    + name : String
+    + staff : List<Doctor>
+}
+
+class Scan {
+    + id : int
+    + patient : Patient
+    + doctor : Doctor
+    + scanType : String
+    + result : String
+    + date : Date
+}
+
+class MedicalOperation {
+    + id : int
+    + patient : Patient
+    + doctor : Doctor
+    + operationType : String
+    + date : Date
+}
+
+class Request {
+    + type : String
+    + details : String
+}
+
+' Relationships
+Patient o-- Appointment: "is scheduled for"
+Doctor o-- Appointment: "conducts"
+Patient o-- Treatment: "receives"
+Doctor o-- Treatment: "provides"
+Patient o-- Visitor: "receives visits from"
+Visitor o-- Patient: "visits"
+Pharmacy o-- Medication: "stocks"
+Prescription o-- Patient: "is prescribed to"
+Prescription o-- Medication: "includes"
+RequestHandler o-- Request: "handles"
+HospitalSystemImpl o-- Command: "uses"
+DispenseMedicationCommand o-- Prescription: "requires"
+Prescription o-- Pharmacy: "fulfilled by"
+Patient o-- LabTest: "undergoes"
+Doctor o-- LabTest: "orders"
+Laboratory o-- LabTest: "conducts"
+Patient o-- Scan: "undergoes"
+Doctor o-- Scan: "orders"
+Scan o-- PerformScanCommand: "requires"
+Patient o-- ICU: "monitored by"
+ICU o-- ICUCommand: "requires"
+StaffRoom o-- Doctor: "accommodates"
+MedicalOperation o-- Patient: "is performed on"
+Doctor o-- MedicalOperation: "performs"
+MedicalOperation o-- OperateCommand: "requires"
+Visitor o-- RegisterVisitorCommand: "requires"
+Treatment o-- RecordTreatmentCommand: "requires"
+LabTest o-- ConductLabTestCommand: "requires"
+HospitalSystem o-- RequestHandler: "delegates requests to"
+RequestHandler --> HospitalSystem: "sends requests to"
+
+@enduml
