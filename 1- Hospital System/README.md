@@ -18,7 +18,8 @@ The hospital consists of a list of commands, each command corresponds to a speci
     * Concrete handlers for `OperateCommand`: The specialized handlers, such as `ConsultationHandler`, `prepOpLabTest`, and `ScheduleORHandler`, form a chain to handle different aspects of the OperateCommand. Each handler performs its specific task and then passes the command to the next handler in the chain.
 
 # Relationships
-* defined relationships between entities such as `Patient` having multiple `Appointment`, `Treatment`, `Visitor`, etc.
+* Defined relationships between entities such as `Patient` having multiple `Appointment`, `Treatment`, `Visitor`, etc.
+* Command handling relationships, where specific handlers are responsible for specific commands.
 
 # Workflow of the System
 ### 1. Admitting a Patient:
