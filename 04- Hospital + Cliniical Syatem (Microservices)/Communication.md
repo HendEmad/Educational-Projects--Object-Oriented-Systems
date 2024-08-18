@@ -129,12 +129,145 @@
             }
             ```
 
-7. `Appointment Scheduling Service` <-> `Lab and Diagnostics Service`
+7. `Appointment Scheduling Service` <-> `Technical Support Service`
     * Exmaple on the communication:
         * Request from `Appointment Scheduling Service`:
             ```json
-            
+            {
+                "issueId": "9876",
+                "issueDescription": "Appointment scheduling system outage",
+                "urgencyLevel": "High"
+            }
+            ```
+        * Request from `Technical Support Service`:
+            ```json
+            {
+                "issueId": "9876",
+                "status": "In Progress",
+                "technician": "Alex Turner",
+                "estimatedTimeToResolution": "1 hour"
+            }
+            ```
+
+8. `Prescription & Medication Service` <-> `Technical Support Service`
+    * Exmaple on the communication:
+        * Request from `Prescription & Medication Service`:
+            ```json
+            {
+                "issueId": "5432",
+                "issueDescription": "Prescription processing delay",
+                "urgencylevel": "Medium"
+            }
+            ```
+        * Request from `Technical Support Service`:
+            ```json
+            {
+                "issueId": "5432",
+                "status": "In progress",
+                "technician": "Linda Gomez",
+                "estimatedTimeToResolution": "3 hours"
+            }
+            ```
+
+9. `Medical Operations Service` <-> `Treatment & ICU Service`
+    * Exmaple on the communication:
+        * Request from `Medical Operations Service`:
+            ```json
+            {
+                "patientId": "12345",
+                "transferReason": "Post-surgery recovery",
+                "initialTreatmentPlan": "Monitor vitals, administer pain relief"
+            }
+            ```
+        * Request from `Treatment & ICU Service`:
+            ```json
+            {
+                "patientId": "12345",
+                "status": "Admitted to ICU",
+                "icuRoom": "ICU-12",
+                "attendingStaff": ["Dr. Emily Johnson"]
+            }
+            ```
+
+10. `Treatment & ICU Service` <-> `Technical Support Service`
+    * Exmaple on the communication:
+        * Request from `Treatment & ICU Service`:
+            ```json
+            {
+                "issueId": "5678",
+                "equipmentDetails": "Ventilator not functioning",
+                "priorityLevel": "Critical"
+            }
+            ```
+        * Request from `Technical Support Service`:
+            ```json
+            {
+                "issueId": "5678",
+                "status": "Repair in Progress",
+                "technician": "Sarah Lee",
+                "estimatedCompletion": "30 minutes"
+            }
+            ```
+
+11. `Lab & Diagnostics Service` <-> `Treatment & ICU Service`
+    * Exmaple on the communication:
+        * Request from `Lab & Diagnostics Service`:
+            ```json
+            {
+                "patientId": "12345",
+                "testRequestId": "56789",
+                "labResults": {
+                    "X-ray": "No fractures detected",
+                    "notes": "Mild inflammation observed"
+                }
+            }
+            ```
+        * Request from `Treatment & ICU Service`:
+            ```json
+            {
+                "status": "Results Received",
+                "furtherActionRequired": "Monitor inflammation, adjust medication if needed"
+            }
+            ```
+
+12. `Medical Operations Service` <-> `Technical Support Service`
+    * Exmaple on the communication:
+        * Request from `Medical Operations Service`:
+            ```json
+            {
+                "issueId": "4321",
+                "issueDescription": "Surgical light malfunction",
+                "urgencyLevel": "High"
+            }
+            ```
+        * Request from `Technical Support Service`:
+            ```json
+            {
+                "issueId": "4321",
+                "status": "In Progress",
+                "technician": "Mike Davis",
+                "estimatedTimeToResolution": "2 hours"
+            }
+            ```
+
+13. `Medical Operations Service` <-> `Lab and Diagnostics Service`
+    * Exmaple on the communication:
+        * Request from `Medical Operations Service`:
+            ```json
+            {
+                "patientId": "12345",
+                "testRequestId": "56789"
+            }
             ```
         * Request from `Lab and Diagnostics Service`:
             ```json
+            {
+                "testRequestId": "56789",
+                "status": "Completed",
+                "results": {
+                    "X-ray": "No fractures detected",
+                    "notes": "Mild inflammation observed"
+                },
+                "attachments": ["scan_image_1.png"]
+            }
             ```
